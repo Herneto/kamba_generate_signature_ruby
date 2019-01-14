@@ -1,6 +1,6 @@
 # Gerando Assinaturas para o Checkout
 
-Com Ruby:
+**Com Ruby:**
 
 Basta configurar o a hash checkout conforme desejado e definir a variável de ambiente SECRET_KEY com a sua chave secreta:
 
@@ -34,7 +34,9 @@ hmac_signature = OpenSSL::HMAC.digest(digest, secret_key, canonical_string)
 signature = Base64.strict_encode64(hmac_signature)
 ```
 
-Com Ruby on Rails:
+**Com Ruby on Rails:**
+
+Basta configurar o a hash checkout conforme desejado e definir a variável de ambiente SECRET_KEY com a sua chave secreta:
 
 ```ruby
 time = Time.now.httpdate
@@ -60,4 +62,4 @@ hmac_signature = OpenSSL::HMAC.digest(digest, secret_key, canonical_string)
 signature = Base64.strict_encode64(hmac_signature)
 ```
 
-Finalmennte, use o valor das variáveis `time` e `signature` para configurar o header do checkout nos parâmetros com o mesmos nomes das variáveis.
+Finalmennte, use o valor das variáveis `time` e `signature` para configurar o header do checkout nos parâmetros com os mesmos nomes das variáveis.
