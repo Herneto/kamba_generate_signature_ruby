@@ -1,65 +1,52 @@
-# Gerando Assinaturas para o Checkout
+# Kamba Signature Generation
 
-**Com Ruby:**
+Gem ruby para gerar a assinatura necessária para processar o checkout nos serviços da Kamba.
+## Instalação
 
-Basta configurar o a hash checkout conforme desejado e definir a variável de ambiente SECRET_KEY com a sua chave secreta:
-
-```ruby
-require 'time'
-require 'json'
-require 'digest'
-require 'openssl'
-require "base64"
-
-time = Time.now.httpdate
-
-secret_key = ENV['SECRET_KEY'].to_s
-
-checkout = {
-  "channel"=>"WEB",
-  "initial_amount"=>5500,
-  "notes"=> "Alguma note exemplo.",
-  "redirect_url_success"=>"http://amarildolucas.com/curso/aplicativo-movel-com-swift/sucesso"
-};
-
-def generate_md5(checkout)
-  Digest::MD5.base64digest(checkout)
-end
-
-json_string = checkout.to_json
-canonical_string =  "POST,application/json,#{generate_md5(json_string)},#{"/v1/checkouts"},#{time}"
-digest = OpenSSL::Digest.new('sha1')
-
-hmac_signature = OpenSSL::HMAC.digest(digest, secret_key, canonical_string)
-signature = Base64.strict_encode64(hmac_signature)
-```
-
-**Com Ruby on Rails:**
-
-Basta configurar o a hash checkout conforme desejado e definir a variável de ambiente SECRET_KEY com a sua chave secreta:
+Adicione essa linha ao Gemfile da sua applicação:
 
 ```ruby
-time = Time.now.httpdate
-
-secret_key = ENV['SECRET_KEY'].to_s
-
-checkout = {
-  "channel"=>"WEB",
-  "initial_amount"=>5500,
-  "notes"=> "Alguma note exemplo.",
-  "redirect_url_success"=>"http://amarildolucas.com/curso/aplicativo-movel-com-swift/sucesso"
-};
-
-def generate_md5(checkout)
-  Digest::MD5.base64digest(checkout)
-end
-
-json_string = checkout.to_json
-canonical_string =  "POST,application/json,#{generate_md5(json_string)},#{"/v1/checkouts"},#{time}"
-digest = OpenSSL::Digest.new('sha1')
-
-hmac_signature = OpenSSL::HMAC.digest(digest, secret_key, canonical_string)
-signature = Base64.strict_encode64(hmac_signature)
+gem 'kamba_signature_generation'
 ```
 
-Finalmennte, use o valor das variáveis `time` e `signature` para configurar o header do checkout nos parâmetros com os mesmos nomes das variáveis.
+E execute:
+
+    $ bundle
+
+ou instale por você mesmo:
+
+    $ gem install kamba_signature_generation
+
+## Configuração
+
+```ruby
+require 'kamba_signature_generation'
+
+KambaSignatureGeneration.secret_key = 'sua-chave-secreta-kamba'
+```
+
+Ou simplesmente atribua o valor da sua chaves-chave-kamba secreta a seguinte variável de ambiente: `ENV["KAMBA_SECRET_KEY"]`.
+
+Usando Ruby on Rails? Coloque isso em config/initializers em novo arquivo chamado kamba_signature_generation.rb.
+
+## Uso
+
+```ruby
+checkout_config = {
+            "channel"=>"WEB",
+            "initial_amount"=>10000,
+            "notes"=> "Curso API Iniciantes",
+            "redirect_url_success"=>"https://seusite.com/curso/api-iniciantes"
+      }
+@signature = KambaSignatureGeneration::API.generate_signature('KAMBA-API-MODE', checkout_config)
+```
+Obs: `KAMBA-API-MODE: sandbox, staging ou production`
+
+
+**Configurações `checkout_config`:**
+- Para o nosso propósito o valor do campo `channel`, permanecerá igual à **WEB** como no exemplo.
+- `initial_amount`, este campo recebe o preço do produto ou serviço a ser comercializado.
+- Substitua o valor do campo `notes` por uma anotação ou descrição geral a cerca do pagamento, e coloque o preço do mesmo no valor do campo `initial_amount`.
+- O campo `redirect_url_success` recebe o endereço da página na qual pretende-se ser redirecionada após o pagamento com sucesso.
+
+Finalmente, use o valor de `@signature` para assinar processar o checkout.
