@@ -1,43 +1,52 @@
-# KambaSignatureGeneration
+# Kamba Signature Generation
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/kamba_signature_generation`. To experiment with that code, run `bin/console` for an interactive prompt.
+Gem ruby para gerar a assinatura necessária para processar o checkout nos serviços da Kamba.
+## Instalação
 
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
-
-Add this line to your application's Gemfile:
+Adicione essa linha ao Gemfile da sua applicação:
 
 ```ruby
 gem 'kamba_signature_generation'
 ```
 
-And then execute:
+E execute:
 
     $ bundle
 
-Or install it yourself as:
+ou instale por você mesmo:
 
     $ gem install kamba_signature_generation
 
-## Usage
+## Configuração
 
-TODO: Write usage instructions here
+```ruby
+require 'kamba_signature_generation'
 
-## Development
+KambaSignatureGeneration.secret_key = 'sua-chave-secreta-kamba'
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Ou simplesmente atribua o valor da sua chaves-chave-kamba secreta a seguinte variável de ambiente: `ENV["KAMBA_SECRET_KEY"]`.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Usando Ruby on Rails? Coloque isso em config/initializers em novo arquivo chamado kamba_signature_generation.rb.
 
-## Contributing
+## Uso
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/kamba_signature_generation. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+```ruby
+checkout_config = {
+            "channel"=>"WEB",
+            "initial_amount"=>10000,
+            "notes"=> "Curso API Iniciantes",
+            "redirect_url_success"=>"https://seusite.com/curso/api-iniciantes"
+      }
+@signature = KambaSignatureGeneration::API.generate_signature('KAMBA-API-MODE', checkout_config)
+```
+Obs: `KAMBA-API-MODE: sandbox, staging ou production`
 
-## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+**Configurações `checkout_config`:**
+- Para o nosso propósito o valor do campo `channel`, permanecerá igual à **WEB** como no exemplo.
+- `initial_amount`, este campo recebe o preço do produto ou serviço a ser comercializado.
+- Substitua o valor do campo `notes` por uma anotação ou descrição geral a cerca do pagamento, e coloque o preço do mesmo no valor do campo `initial_amount`.
+- O campo `redirect_url_success` recebe o endereço da página na qual pretende-se ser redirecionada após o pagamento com sucesso.
 
-## Code of Conduct
-
-Everyone interacting in the KambaSignatureGeneration project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/kamba_signature_generation/blob/master/CODE_OF_CONDUCT.md).
+Finalmente, use o valor de `@signature` para assinar processar o checkout.
