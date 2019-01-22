@@ -5,7 +5,7 @@ module KambaSignatureGeneration
     end
 
     def secret_key
-      @secret_key || ENV["KAMBA_SECRET_KEY"]
+      @secret_key || ENV['KAMBA_SECRET_KEY']
     end
   end
 end
