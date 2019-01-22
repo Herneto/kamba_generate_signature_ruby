@@ -38,7 +38,7 @@ checkout_config = {
             "notes"=> "Curso API Iniciantes",
             "redirect_url_success"=>"https://seusite.com/curso/api-iniciantes"
       }
-@signature = KambaSignatureGeneration::API.generate_signature('KAMBA-API-MODE', checkout_config)
+@signature = KambaSignatureGeneration::API.generate_signature(checkout_config)
 ```
 Obs: `KAMBA-API-MODE: sandbox, staging ou production`
 
