@@ -14,7 +14,7 @@ describe 'KambaSignatureGeneration::API' do
 
     it 'should generate signature string' do
       signature = KambaSignatureGeneration::API.generate_signature(@checkout)
-      expect(sinature).to_not be_nil
+      expect(signature).to_not be_nil
     end
   end
 end
