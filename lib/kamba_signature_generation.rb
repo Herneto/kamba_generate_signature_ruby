@@ -1,5 +1,8 @@
-require "kamba_signature_generation/version"
+# frozen_string_literal: true
 
+require 'kamba_signature_generation/version'
+
+# lib/kamba_signature_generation.rb
 module KambaSignatureGeneration
   class Error < StandardError; end
 

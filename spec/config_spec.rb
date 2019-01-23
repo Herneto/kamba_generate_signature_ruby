@@ -1,25 +1,13 @@
-
+# frozen_string_literal: true
 
 describe 'KambaSignatureGeneration' do
   describe 'secret_key' do
-    before(:each) do
-      @default_secret_key = KambaSignatureGeneration.secret_key
-      KambaSignatureGeneration.secret_key = nil
-      ENV['KAMBA_SECRET_KEY'] = nil
+    it 'should have a secret_key' do
+      secret_key = KambaSignatureGeneration.secret_key = 'secret_key'
+      expect(secret_key).to_not be_nil
     end
 
-    after(:each) do
-      KambaSignatureGeneration.secret_key = @default_secret_key
-    end
-
-    it 'should set and read instance variable' do
-      KambaSignatureGeneration.secret_key = '123'
-      KambaSignatureGeneration.secret_key.should == '123'
-    end
-
-    it 'should fallback to ENV variable' do
-      ENV['KAMBA_SECRET_KEY'] = 'checkout'
-      KambaSignatureGeneration.secret_key.should == 'checkout'
-    end
+    # TODO: What about when the secret_key is nil.
+    #       What errors/exceptions are returned?
   end
 end
