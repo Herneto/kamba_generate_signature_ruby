@@ -17,7 +17,7 @@ module KambaSignatureGeneration
     end
 
     def self.generate_md5(checkout)
-      Digest::MD5.base64digest(checkout)
+      Digest::MD5.hexdigest(checkout)
     end
   end
 end

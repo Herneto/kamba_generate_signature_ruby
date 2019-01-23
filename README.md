@@ -23,13 +23,13 @@ ou instale através da linha de comandos:
 ```ruby
 require 'kamba_signature_generation'
 
-KambaSignatureGeneration.secret_key = 'SUA_CHAVE_SECRETA_KAMBA' 
+KambaSignatureGeneration.secret_key = 'SUA_CHAVE_SECRETA_KAMBA'
 ```
 
-**Nota:** Use sempre configurações de variáveis de ambiente para manter os seus dados em segurança e nunca compartilhe a sua chave secreta ou adicione ao seu cliente frontend. 
+**Nota:** Use sempre configurações de variáveis de ambiente para manter os seus dados em segurança e nunca compartilhe a sua chave secreta ou adicione ao seu cliente frontend.
 Exemplo: `ENV['SUA_CHAVE_SECRETA_KAMBA']`.
 
-**Usando Ruby on Rails?** 
+**Usando Ruby on Rails?**
 Adicione o código acima em `config/initializers` em um arquivo chamado `kamba_signature_generation.rb`.
 
 ## Como gerar a assinatura
